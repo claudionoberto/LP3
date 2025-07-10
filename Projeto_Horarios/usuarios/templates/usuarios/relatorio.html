@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatórios - HorárioEdu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar (mesma da tela anterior) -->
+  <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-blue-800 font-bold text-xl flex items-center gap-2">
+      <span>📅</span> HorárioEdu
+    </div>
+    <nav class="space-x-6 text-sm text-gray-700">
+      <a href="/home" class="hover:text-blue-600">Cadastro</a>
+      <a href="/horarios" class="hover:text-blue-600">Horários</a>
+      <a href="#" class="text-blue-700 font-semibold">Relatórios</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="text-sm">claudionoberto</span>
+      <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800">👤</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="px-6 py-6">
+    <h2 class="text-2xl font-semibold mb-4">Relatórios de Horários</h2>
+
+    <!-- Filtros -->
+    <div class="bg-white p-6 rounded shadow mb-6">
+      <h3 class="text-lg font-medium text-gray-700 mb-4">Filtrar por:</h3>
+      <form method="GET" action="/relatorios/gerar" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm mb-1">Turma</label>
+          <select name="turma_id" class="w-full px-3 py-2 border rounded">
+            <option value="">Todas</option>
+            {% for turma in turmas %}
+              <option value="{{ turma.id }}">{{ turma.nome_turma }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Professor</label>
+          <select name="professor_id" class="w-full px-3 py-2 border rounded">
+            <option value="">Todos</option>
+            {% for professor in professores %}
+              <option value="{{ professor.id }}">{{ professor.nome_professor }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Disciplina</label>
+          <select name="disciplina_id" class="w-full px-3 py-2 border rounded">
+            <option value="">Todas</option>
+            {% for disciplina in disciplinas %}
+              <option value="{{ disciplina.id }}">{{ disciplina.nome_disciplina }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="sm:col-span-3 flex justify-end mt-4 gap-4">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Gerar Relatório</button>
+          <button type="button" onclick="window.print()" class="bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 text-sm">Imprimir</button>
+          <a href="{% url 'relatorios_pdf' %}?turma_id={{ request.GET.turma_id }}&professor_id={{ request.GET.professor_id }}&disciplina_id={{ request.GET.disciplina_id }}"
+          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm flex items-center"
+          target="_blank">
+          Exportar PDF
+         </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Resultado -->
+    <section class="bg-white p-6 rounded shadow">
+      <h3 class="text-lg font-medium mb-4">Resultado do Relatório</h3>
+      {% if resultados %}
+        <table class="w-full table-auto text-sm">
+          <thead class="bg-blue-50 text-left">
+            <tr>
+              <th class="px-4 py-2">Turma</th>
+              <th class="px-4 py-2">Disciplina</th>
+              <th class="px-4 py-2">Professor</th>
+              <th class="px-4 py-2">Dia</th>
+              <th class="px-4 py-2">Horário</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for aula in resultados %}
+              <tr class="border-t">
+                <td class="px-4 py-2">{{ aula.turma.nome_turma }}</td>
+                <td class="px-4 py-2">{{ aula.disciplina.nome_disciplina }}</td>
+                <td class="px-4 py-2">{{ aula.professor.nome_professor }}</td>
+                <td class="px-4 py-2">{{ aula.dia_semana }}</td>
+                <td class="px-4 py-2">{{ aula.horario }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-gray-600">Nenhum dado encontrado para os filtros selecionados.</p>
+      {% endif %}
+    </section>
+  </main>
+
+</body>
+</html>

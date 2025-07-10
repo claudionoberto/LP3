@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horários - HorárioEdu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Cabeçalho -->
+  <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-blue-800 font-bold text-xl flex items-center gap-2">
+     <span>📅</span> HorárioEdu
+    </div>
+    <nav class="space-x-6 text-sm text-gray-700">
+      <a href="/home" class="hover:text-blue-600">Cadastro</a>
+      <a href="#" class="text-blue-700 font-semibold">Horários</a>
+      <a href="{% url 'relatorios' %}" class="hover:text-blue-600">Relatórios</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="text-sm">claudionoberto</span>
+      <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800">👤</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="px-6 py-8">
+    <h1 class="text-2xl font-semibold mb-6 text-blue-800">Horário de Aulas - 2025/1</h1>
+
+    <!-- Botão Dropdown Turmas -->
+    <div class="relative mb-6" x-data="{ open: false }">
+      <button @click="open = !open"
+        class="bg-white border border-gray-300 px-4 py-2 rounded shadow-sm hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm font-medium">
+        TURMAS
+      </button>
+      <div x-show="open" @click.away="open = false"
+        class="absolute z-50 mt-2 w-80 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded shadow text-sm p-2 space-y-1">
+        <div class="flex flex-col gap-1">
+          {% for turma in turmas %}
+            <div
+              @click="window.location.href='?turma_id={{ turma.id }}'"
+              class="px-2 py-1 rounded cursor-pointer transition
+                {% if turma_selecionada and turma_selecionada.id == turma.id %}
+                  bg-blue-600 text-white
+                {% else %}
+                  hover:bg-blue-50
+                {% endif %}"
+            >
+              {{ turma.nome_turma }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de Horários -->
+    <div class="bg-white shadow rounded overflow-x-auto">
+        <table class="min-w-full border border-gray-200 text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-3 text-left border-r border-gray-200 w-32">Período</th>
+              {% for dia in dias_semana %}
+                <th class="p-3 text-left border-r border-gray-200 w-40 max-w-[10rem]"> {{ dia }} </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for periodo, horario in horarios_periodos %}
+              <tr>
+                <td class="p-3 border-r font-medium">{{ periodo }}<br><span class="text-xs text-gray-500">{{ horario }}</span></td>
+                {% for dia in dias_semana %}
+  <td class="p-3 border-r max-w-[10rem] break-words align-top">
+    {% for aula in aulas %}
+      {% if aula.horario == horario and aula.dia_semana == dia %}
+        <div class="font-semibold text-blue-700">{{ aula.disciplina.nome_disciplina }}</div>
+        <div class="text-xs text-gray-600">{{ aula.professor.nome_professor }}</div>
+      {% endif %}
+    {% endfor %}
+  </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+  </main>
+</body>
+</html>

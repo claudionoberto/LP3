@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorárioEdu - Gerenciamento de Horários</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-blue-800 font-bold text-xl flex items-center gap-2">
+      <span>📅</span> HorárioEdu
+    </div>
+    <nav class="space-x-6 text-sm text-gray-700">
+      <a href="#" class="text-blue-700 font-semibold">Cadastro</a>
+      <a href="/horarios" class="hover:text-blue-600">Horários</a>
+      <a href="{% url 'relatorios' %}" class="hover:text-blue-600">Relatórios</a>
+
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="text-sm">claudionoberto</span>
+      <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800">👤</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="px-6 mt-4 flex gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-semibold mb-4">Área de Cadastro</h2>
+      <p class="text-gray-700 mb-4 font-medium">Cadastro de Dados Básicos</p>
+
+      <!-- Ações de Cadastro -->
+      <div class="grid grid-cols-5 gap-4 mb-6">
+        <button onclick="toggleModal('modalTurma')" class="bg-white p-4 rounded shadow text-center hover:bg-blue-50 transition">
+          <div class="text-blue-600 text-xl mb-1">🏫</div>
+          <div class="text-md font-semibold">Cadastrar Turmas</div>
+        </button>
+        <button onclick="toggleModal('modalProfessor')" class="bg-white p-4 rounded shadow text-center hover:bg-blue-50 transition">
+          <div class="text-blue-600 text-xl mb-1">👨‍🏫</div>
+          <div class="text-md font-semibold">Cadastrar Professores</div>
+        </button>
+        <button onclick="toggleModal('modalDisciplina')" class="bg-white p-4 rounded shadow text-center hover:bg-blue-50 transition">
+          <div class="text-blue-600 text-xl mb-1">📚</div>
+          <div class="text-md font-semibold">Cadastrar Disciplinas</div>
+        </button>
+        <div></div>
+        <div></div>
+      </div>
+
+      <p class="text-gray-700 mb-4 font-medium">Gerenciamento de Aulas</p>
+
+<div class="grid grid-cols-2 gap-4 mb-6" style="max-width: 400px;">
+  <button onclick="toggleModal('modalAula')" class="bg-white p-4 rounded shadow text-center hover:bg-blue-50 transition w-full">
+    <div class="text-blue-600 text-xl mb-1">➕</div>
+    <div class="text-md font-semibold">Nova Aula</div>
+  </button>
+  <button onclick="toggleModal('modalExcluirAula')" class="bg-white p-4 rounded shadow text-center hover:bg-red-50 transition w-full">
+    <div class="text-red-600 text-xl mb-1">🗑️</div>
+    <div class="text-md font-semibold text-red-700">Excluir Aula</div>
+  </button>
+</div>
+    </div>
+  </main>
+
+  <!-- Modais -->
+
+  <!-- Modal de Turmas -->
+  <div id="modalTurma" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-blue-800">Cadastrar Turma</h2>
+      <form method="POST" action="{% url 'cadastrar_turma' %}">
+        {% csrf_token %}
+        <input type="text" name="nome_turma" placeholder="Nome da Turma" class="w-full mb-3 px-4 py-2 border rounded">
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="toggleModal('modalTurma')" class="px-4 py-2 text-sm text-gray-600">Cancelar</button>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Professores -->
+  <div id="modalProfessor" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-blue-800">Cadastrar Professor</h2>
+      <form method="POST" action="{% url 'cadastrar_professor' %}">
+        {% csrf_token %}
+        <input type="text" name="nome_professor" placeholder="Nome" class="w-full mb-3 px-4 py-2 border rounded">
+        <input type="text" name="email" placeholder="Email" class="w-full mb-3 px-4 py-2 border rounded">
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="toggleModal('modalProfessor')" class="px-4 py-2 text-sm text-gray-600">Cancelar</button>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Disciplinas -->
+  <div id="modalDisciplina" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-blue-800">Cadastrar Disciplina</h2>
+      <form method="POST" action="{% url 'cadastrar_disciplina' %}">
+        {% csrf_token %}
+        <input type="text" name="nome_disciplina" placeholder="Nome da Disciplina" class="w-full mb-3 px-4 py-2 border rounded">
+        <input type="text" name="carga_horaria" placeholder="Carga Horária" class="w-full mb-3 px-4 py-2 border rounded">
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="toggleModal('modalDisciplina')" class="px-4 py-2 text-sm text-gray-600">Cancelar</button>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Aula -->
+<div id="modalAula" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
+    <h2 class="text-xl font-semibold mb-4 text-blue-800">Cadastrar Aula</h2>
+    <form method="POST" action="{% url 'cadastrar_aula' %}">
+      {% csrf_token %}
+
+      <label class="block mb-2 text-sm">Turma</label>
+      <select name="turma_id" class="w-full mb-3 px-4 py-2 border rounded">
+        {% for turma in turmas %}
+          <option value="{{ turma.id }}">{{ turma.nome_turma }}</option>
+        {% endfor %}
+      </select>
+
+      <label class="block mb-2 text-sm">Disciplina</label>
+      <select name="disciplina_id" class="w-full mb-3 px-4 py-2 border rounded">
+        {% for disciplina in disciplinas %}
+          <option value="{{ disciplina.id }}">{{ disciplina.nome_disciplina }}</option>
+        {% endfor %}
+      </select>
+
+      <label class="block mb-2 text-sm">Professor</label>
+      <select name="professor_id" class="w-full mb-3 px-4 py-2 border rounded">
+        {% for professor in professores %}
+          <option value="{{ professor.id }}">{{ professor.nome_professor }}</option>
+        {% endfor %}
+      </select>
+
+      <label class="block mb-2 text-sm">Dia da Semana</label>
+        <select name="dia_semana" class="w-full mb-3 px-4 py-2 border rounded">
+          <option value="Segunda">Segunda-feira</option>
+          <option value="Terça">Terça-feira</option>
+          <option value="Quarta">Quarta-feira</option>
+          <option value="Quinta">Quinta-feira</option>
+          <option value="Sexta">Sexta-feira</option>
+          <option value="Sábado">Sábado</option>
+        </select>
+
+      <label class="block mb-2 text-sm">Horário</label>
+        <select name="horario" class="w-full mb-3 px-4 py-2 border rounded">
+          <option value="7:00 - 7:50">1ª aula - 7:00 - 7:50</option>
+          <option value="7:50 - 8:40">2ª aula - 7:50 - 8:40</option>
+          <option value="8:40 - 9:30">3ª aula - 8:40 - 9:30</option>
+          <option value="9:50 - 10:40">4ª aula - 9:50 - 10:40</option>
+          <option value="10:40 - 11:30">5ª aula - 10:40 - 11:30</option>
+          <option value="11:30 - 12:20">6ª aula - 11:30 - 12:20</option>
+          <!-- Adicione mais horários conforme sua grade -->
+        </select>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button" onclick="toggleModal('modalAula')" class="px-4 py-2 text-sm text-gray-600">Cancelar</button>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Excluir Aula -->
+<div id="modalExcluirAula" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
+    <h2 class="text-xl font-semibold mb-4 text-red-700">Excluir Aula</h2>
+    <form method="POST" action="{% url 'excluir_aula' %}">
+      {% csrf_token %}
+      <label class="block mb-2 text-sm">Selecione a Aula</label>
+      <select name="aula_id" class="w-full mb-3 px-4 py-2 border rounded" required>
+        {% for aula in aulas %}
+          <option value="{{ aula.id }}">
+            {{ aula.turma.nome_turma }} | {{ aula.disciplina.nome_disciplina }} | {{ aula.professor.nome_professor }} | {{ aula.dia_semana }} | {{ aula.horario }}
+          </option>
+        {% endfor %}
+      </select>
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button" onclick="toggleModal('modalExcluirAula')" class="px-4 py-2 text-sm text-gray-600">Cancelar</button>
+        <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">Excluir</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script>
+    function toggleModal(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+  </script>
+
+</body>
+</html>

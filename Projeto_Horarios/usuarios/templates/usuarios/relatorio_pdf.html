@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Relatório PDF</title>
+  <style>
+    body { font-family: sans-serif; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    th { background: #eee; }
+  </style>
+</head>
+<body>
+  <h2>Relatório de Horários</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Turma</th>
+        <th>Disciplina</th>
+        <th>Professor</th>
+        <th>Dia</th>
+        <th>Horário</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for aula in resultados %}
+        <tr>
+          <td>{{ aula.turma.nome_turma }}</td>
+          <td>{{ aula.disciplina.nome_disciplina }}</td>
+          <td>{{ aula.professor.nome_professor }}</td>
+          <td>{{ aula.dia_semana }}</td>
+          <td>{{ aula.horario }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
